@@ -3,6 +3,8 @@
 
 #define wPi_PWM1 23
 
+extern double Dist();
+
 int PSC = 19;
 int RANGE = 100;
 //int DUTY = RANGE / 2;
@@ -23,16 +25,40 @@ void calcRange()	// Range 값 계산 및 음계 데이터 사용
 	}
 }
 
+double rate = 1;
 void playSound(int um, int rhy)	// um : pitch, rhy : rhythm
 {
-	pwmSetClock(PSC);	// 프리스케일러 : ~ 1MHz
+	pwmSetClock(PSC);	// 프리스케일러 : ~1MHz
 	// 10K = 19.2M / (19 * 100)
 	pwmSetRange(range[um]);
 	pwmWrite(wPi_PWM1, range[um] / 2);
-	delay(2000 / rhy);
+	delay(2000 / (rhy * rate));
 }
 
-int main()
+int iFlag = 0;
+void initSound()
+{
+	wiringPiSetup();
+	pinMode(wPi_PWM1, PWM_OUTPUT);
+	pwmSetMode(PWM_MODE_MS);
+	calcRange();
+	iFlag = 1;
+}
+
+void Play(double r)
+{
+	if (!iFlag) initSound();
+	rate = r;
+	
+	for (int i = 0; song[i] != -1; i++)
+	{
+		playSound(song[i], rhythm[i]);
+	}
+	pwmWrite(wPi_PWM1, 0);
+	pinMode(wPi_PWM1, OUTPUT); // 하드웨어 PWM은 따로 종료 코드가 없으므로 핀 모드를 바꿔줌
+}
+
+/*int main()
 {
 	wiringPiSetup();
 	
@@ -43,9 +69,10 @@ int main()
 	
 	for (int i = 0; song[i] != -1; i++)
 	{
-		playSound(song[i], rhythm[i]);
+		double dis = Dist();
+		playSound(song[i], rhythm[i], dis);
 	}
 	pinMode(wPi_PWM1, OUTPUT); // 하드웨어 PWM은 따로 종료 코드가 없으므로 핀 모드를 바꿔줌
 	
 	return 0;
-}
+}*/
