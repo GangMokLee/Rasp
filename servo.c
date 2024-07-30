@@ -7,9 +7,9 @@ int main(int argc, char **argv)
 {
 	wiringPiSetup();
 	pinMode(SERVO_PIN, OUTPUT);
-	for (int i = 0; i < 5 ; i++)
+	for (int i = 0; i < 3 ; i++)
 	{
-		for (int i = 0; i < 25 ; i++)
+		for (int i = 0; i < 25 ; i++)	// 20ms 25번 0.5초(500ms)
 		{
 			digitalWrite(SERVO_PIN, 1);
 			delayMicroseconds(1000);	// 펄스의 폭은 1ms
