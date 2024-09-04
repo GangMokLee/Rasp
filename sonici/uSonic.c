@@ -9,6 +9,14 @@ extern double Dist();
 
 double d = 0.0;
 int cnt = 0;
+int park = 0;
+
+int parking()
+{
+	if (d < 10) park = 1;
+	else park = 0;
+}
+
 void * usThread(void *a)
 {
 	while(1)
@@ -37,9 +45,17 @@ int main(int argc, char **argv)
 	pthread_create(&threadA, NULL, usThread, NULL);
 	
 	for(;;)
-	{		
-		printf("\033[10;30HDistance : %.2f(cm)   \n", d);//Dist());
-		delay(200);
+	{	
+		parking();
+		if (park)
+		{
+			printf("\033[10;30H차가 주차되어 있습니다.   \n");
+		}
+		else if(!park)
+		{
+			printf("\033[10;30HDistance : %.2f(cm)   \n", d);//Dist());
+			delay(200);
+		}
 	}
 	return 0;
 }

@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 	pinMode(TRIG, OUTPUT);
 	pinMode(ECHO, INPUT);
 
-	pthread_t threadA, t1;
+	pthread_t threadA;
 	printf("\033[2J\033[10;30H\n");
 	pthread_create(&threadA, NULL, usThread, NULL);
 	

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <wiringPi.h>
 #include <pthread.h>
+#include <string.h>
 
 #define TRIG 8
 #define ECHO 9
@@ -18,12 +19,23 @@ void *usThread(void *a)
 	}
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	pthread_t th;
 	wiringPiSetup();
-	pinMode(TRIG, OUTPUT);
 	pinMode(ECHO, INPUT);
+	
+	if ((n > 1) && (strcmp(v[1], "-i") == 0)
+	{
+		pinMode(TRIG, PWM_OUTPUT);
+		TriggerEx();
+		wiringPiSetup(ECHO, INT_EDGE_BOTH, usisr);
+	}
+	else
+	{
+		pinMode(TRIG, OUTPUT);
+		pthread_create&th, NULL, usThread, NULL);
+	}
 	
 	//wiringPiISR(TRIG, INT_EDGE_BOTH, usisr);
 	//TriggerEx();
